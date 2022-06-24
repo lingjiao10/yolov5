@@ -16,22 +16,32 @@ def save_annotations(image_dir, anno_dir, filename, objs, filepath):
 
     dst_path = image_dir + "/" + imgname
     img_path = filepath
-    img = cv2.imread(img_path)
-    im = Image.open(img_path)
+    try:
+        img = cv2.imread(img_path)
+    except Exception as e:
+        print('image is not available: ', imgname)
+        return 0
+    else:
+        shutil.copy(img_path, dst_path)  # 把原始图像复制到目标文件夹
+        #创建label txt
+        with open(os.path.join(anno_dir, '{}.txt'.format(txtname)), 'a') as f:
+            for obj in objs:
+                f.write(str(obj[0]) + ' ' + str(obj[1]) + ' ' + str(obj[2]) + 
+                    ' ' + str(obj[3]) + ' ' + str(obj[4]) + '\n')
+        return 1
+    finally:
+        pass
+    
+    # im = Image.open(img_path)
     # if im.mode != "RGB":
     #     # print(filename + " not a RGB image")
     #     im.close()
     #     return 0
-    im.close()
-    shutil.copy(img_path, dst_path)  # 把原始图像复制到目标文件夹
-    #创建label txt
-    with open(os.path.join(anno_dir, '{}.txt'.format(txtname)), 'a') as f:
-        for obj in objs:
-            f.write(str(obj[0]) + ' ' + str(obj[1]) + ' ' + str(obj[2]) + 
-                ' ' + str(obj[3]) + ' ' + str(obj[4]) + '\n')
+    # im.close()
+    
 
 
-def showbycv(coco, dataType, img, classes, origin_image_dir, image_dir, anno_dir, verbose=False):
+def showbycv(coco, dataType, img, classes, oldId2newId, origin_image_dir, image_dir, anno_dir, verbose=False):
     filename = img['file_name']
     filepath = os.path.join(origin_image_dir, filename)
     I = cv2.imread(filepath)
@@ -49,7 +59,7 @@ def showbycv(coco, dataType, img, classes, origin_image_dir, image_dir, anno_dir
             x,y,w,h = ann['bbox']    
             cx = x+w/2.0
             cy = y+h/2.0
-            obj = [ann['category_id'], cx/image_w, cy/image_h, w/image_w, h/image_h]
+            obj = [oldId2newId[ann['category_id']], cx/image_w, cy/image_h, w/image_w, h/image_h]
             objs.append(obj)
             if verbose:
                 cv2.rectangle(I, (x, y), (x+w, y+h), (255, 0, 0))
@@ -71,10 +81,14 @@ def showbycv(coco, dataType, img, classes, origin_image_dir, image_dir, anno_dir
 
 def catid2name(coco):  # 将名字和id号建立一个字典
     classes = dict()
+    oldId2newId = dict()
+    i = 0
     for cat in coco.dataset['categories']:
         classes[cat['id']] = cat['name']
+        oldId2newId[cat['id']] = i
         # print(str(cat['id'])+":"+cat['name'])
-    return classes
+        i+=1
+    return classes, oldId2newId
 
 
 def inaturalist2yolov5(root_path, image_path, annotation_file, dataType='train'):
@@ -87,9 +101,9 @@ def inaturalist2yolov5(root_path, image_path, annotation_file, dataType='train')
     # annFile = 'instances_{}.json'.format(dataType)
     annpath = os.path.join(root_path, annotation_file)
     coco = COCO(annpath)
-    classes = catid2name(coco)
+    classes, oldId2newId = catid2name(coco)
     imgIds = coco.getImgIds()
-    imgIds=imgIds[0:128] #测试用，抽取10张图片，看下存储效果
+    # imgIds=imgIds[0:128] #测试用，抽取10张图片，看下存储效果
 
     grouptxt = os.path.join(root_path, '{}.txt'.format(dataType)) #保存数据分组txt
     file = open(grouptxt, 'w')
@@ -97,7 +111,7 @@ def inaturalist2yolov5(root_path, image_path, annotation_file, dataType='train')
     for imgId in tqdm(imgIds):
         # imgId = imgId[6:12]
         img = coco.loadImgs(imgId)[0]
-        result = showbycv(coco, dataType, img, classes, root_path+image_path, image_dir, 
+        result = showbycv(coco, dataType, img, classes, oldId2newId, root_path+image_path, image_dir, 
             anno_dir, verbose=False)
         # print(result)
         if result!=0:
@@ -109,5 +123,7 @@ def inaturalist2yolov5(root_path, image_path, annotation_file, dataType='train')
     file.close()
 
 if __name__ == "__main__":
-    inaturalist2yolov5('/home/Datasets/iNaturalist/2017', '', 'annotations/train_2017_Insecta_bboxes.json', 
-        'train_insecta')
+    # inaturalist2yolov5('/home/Datasets/iNaturalist/2017', '', 'annotations/train_2017_Insecta_bboxes.json', 
+        # 'train_insecta')
+        inaturalist2yolov5('/home/Datasets/iNaturalist/2017', '', 'annotations/val_2017_Insecta_bboxes.json', 
+        'val_insecta')
