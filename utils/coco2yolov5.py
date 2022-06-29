@@ -63,10 +63,6 @@ def showbycv(coco, dataType, img, classes, oldId2newId, origin_image_dir, image_
             objs.append(obj)
             if verbose:
                 cv2.rectangle(I, (x, y), (x+w, y+h), (255, 0, 0))
-                # xa = int(cx-w/2)
-                # ya = int(cy-h/2)
-                # print(xa, ya)
-                # cv2.rectangle(I, (xa, ya), (xa+w, ya+h), (255, 0, 0))
                 cv2.putText(I, name, (x, y), 3, 1, (0, 0, 255))
 
 
