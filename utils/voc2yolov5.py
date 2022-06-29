@@ -121,16 +121,22 @@ def  voc2yolov5(root_path, image_path, dataType='train'):
     file = open(grouptxt, 'w')
 
     for imgId in tqdm(imgIds):
-        sample = {
-        'file_name': imgId + '.jpg',
-        'target': parse_voc_xml(ET_parse(os.path.join(root_path, 'Annotations', imgId + '.xml')).getroot()),
-        }
-        result = showbycv(sample, dataType, label_names, os.path.join(root_path, image_path), image_dir, 
-            anno_dir, verbose=True)
-        # print(result)
-        if result!=0:
-            file.write(os.path.join('./images', dataType, imgId + '.jpg') + '\n')
+        try:
+            sample = {
+                'file_name': imgId + '.jpg',
+                'target': parse_voc_xml(ET_parse(os.path.join(root_path, 'Annotations', imgId + '.xml')).getroot()),
+                }
+            result = showbycv(sample, dataType, label_names, os.path.join(root_path, image_path), image_dir, 
+                anno_dir, verbose=False)
+            # print(result)
+            if result!=0:
+                file.write(os.path.join('./images', dataType, imgId + '.jpg') + '\n')
+        except Exception as e:
+            print('error: ', imgId)
+
+
 
 
 if __name__ == "__main__":
-        voc2yolov5('/home/Datasets/IP102_v1.1/Detection/VOC2007', 'JPEGImages', 'trainval')
+        # voc2yolov5('/home/Datasets/IP102_v1.1/Detection/VOC2007', 'JPEGImages', 'trainval')
+        voc2yolov5('/home/Datasets/IP102_v1.1/Detection/VOC2007', 'JPEGImages', 'test')
