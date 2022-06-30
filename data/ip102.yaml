@@ -1,0 +1,41 @@
+# IP102 by Cong
+# IP102 dataset https:
+# Example usage: python train.py --data ip102.yaml
+# parent
+# |── parent
+# |   └── git
+# |       └── yolov5
+# └── datasets
+#     └── IP102_v1.1  ← downloads here (20.1 GB)
+
+
+# Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
+path: ../../../Datasets/IP102_v1.1/Detection/VOC2007/  # dataset root dir
+train: trainval.txt  # train images (relative to 'path') 118287 images
+val: test.txt  # val images (relative to 'path') 5000 images
+test: test.txt  # 20288 of 40670 images, submit to https://competitions.codalab.org/competitions/20794
+
+# Classes
+nc: 102  # number of classes
+names: ['Rice leaf roller', 'Rice leaf caterpillar', 'Paddy stem maggot', 'Asiatic rice borer', 'Yellow rice borer', 
+    'Rice gall midge', 'Rice stemfly', 'Brown plant hopper', 'White backed plant hopper', 'Small brown plant hopper', 
+    'Rice water weevil', 'Rice leafhopper', 'Grain spreader thrips', 'Rice shell pest', 'Grub', 'Mole cricket', 'Wireworm', 
+    'White margined moth', 'Black cutworm', 'Large cutworm', 'Yellow cutworm', 'Red spider', 'Corn borer', 'Army worm', 
+    'Aphids', 'Potosiabre vitarsis', 'Peach borer', 'English grain aphid', 'Green bug', 'Bird cherry-oataphid', 
+    'Wheat blossom midge', 'Penthaleus major', 'Longlegged spider mite', 'Wheat phloeothrips', 'Wheat sawfly', 
+    'Cerodonta denticornis', 'Beet fly', 'Flea beetle', 'Cabbage army worm', 'Beet army worm', 'Beet spot flies', 
+    'Meadow moth', 'Beet weevil', 'Sericaorient alismots chulsky', 'Alfalfa weevil', 'Flax budworm', 'Alfalfa plant bug', 
+    'Tarnished plant bug', 'Locustoidea', 'Lytta polita', 'Legume blister beetle', 'Blister beetle', 'Therioaphis maculata buckton', 
+    'Odontothrips loti', 'Thrips', 'Alfalfa seed chalcid', 'Pieris canidia', 'Apolygus lucorum', 'Limacodidae', 'Viteus vitifoliae', 
+    'Colomerus vitis', 'Brevipoalpus lewisi mcgregor', 'Oides decempunctata', 'Polyphagotars onemus latus', 
+    'Pseudococcus comstocki kuwana', 'Parathrene regalis', 'Ampelophaga', 'Lycorma delicatula', 'Xylotrechus', 
+    'Cicadella viridis', 'Miridae', 'Trialeurodes vaporariorum', 'Erythroneura apicalis', 'Papilio xuthus', 
+    'Panonchus citri mcgregor', 'Phyllocoptes oleiverus ashmead', 'Icerya purchasi maskell', 'Unaspis yanonensis', 
+    'Ceroplastes rubens', 'Chrysomphalus aonidum', 'Parlatoria zizyphus lucus', 'Nipaecoccus vastalor', 'Aleurocanthus spiniferus', 
+    'Tetradacus c bactrocera minax', 'Dacus dorsalis(hendel)', 'Bactrocera tsuneonis', 'Prodenia litura', 'Adristyrannus', 
+    'Phyllocnistis citrella stainton', 'Toxoptera citricidus', 'Toxoptera aurantii', 'Aphis citricola vander goot', 
+    'Scirtothrips dorsalis hood', 'Dasineura sp', 'Lawana imitata melichar', 'Salurnis marginella guerr', 
+    'Deporaus marginatus pascoe', 'Chlumetia transversa', 'Mango flat beak leafhopper', 'Rhytidodera bowrinii white', 
+    'Sternochetus frigidus', 'Cicadellidae']
+
+# class names
