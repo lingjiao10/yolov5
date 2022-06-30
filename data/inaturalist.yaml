@@ -1,5 +1,5 @@
 # iNaturalist by Cong
-# iNaturalist 2017 dataset http://
+# iNaturalist 2017 dataset https://github.com/visipedia/inat_comp#evaluation
 # Example usage: python train.py --data inaturalist.yaml
 # parent
 # |── parent
